@@ -4,7 +4,7 @@ jQuery.tweetspan
 Pull updates from a Twitter account straight into an HTML element. Check out test.html for a simple example.
 
 You can use any field from the
-[https://dev.twitter.com/docs/api/1/get/search](Twitter Search JSON API)'s result set. You can use filters
+[Twitter Search JSON API](https://dev.twitter.com/docs/api/1/get/search)'s result set. You can use filters
 to determine how text should be formatted. Currently available filters are:
 
 - ``tweet``: To format tweet contents, linking @ usernames, hashtags and URLs
@@ -14,4 +14,4 @@ to determine how text should be formatted. Currently available filters are:
 
 To chain filters together, separate each filter name with a space, just as you would with classes.
 
-Any questions, please contact [http://substrakt.co.uk](Substrakt).
+Any questions, please contact [Substrakt](http://substrakt.co.uk).
