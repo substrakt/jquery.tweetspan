@@ -1,3 +1,16 @@
+jQuery.fn.tweetspan = function(option, argument) {
+	if(typeof(option) == 'string') {
+		var options = $(this).data('ts-options');
+		
+		if(typeof(options) == 'undefined') {
+			options = {};
+		}
+		
+		options[option] = argument;
+		$(this).data('ts-options', options);
+	}
+}
+
 jQuery(document).ready(
 	function($) {
 		var twitterFilters = {
@@ -121,17 +134,25 @@ jQuery(document).ready(
 						function(context) {
 							return function(data) {
 								var template = context.find('.tweet');
+								var parent = template.parent();
+								var options = context.data('ts-options');
 								var results = typeof data.results != 'undefined' ? data.results : [];
 								var tweet;
 								
 								for(var i = 0; i < results.length; i ++) {
 									tweet = template.clone();
 									formatTweetFields(results[i], tweet);
-									context.append(tweet);
+									parent.append(tweet);
 								}
 								
 								template.remove();
 								context.show();
+								
+								if(typeof(options) == 'object') {
+									if(typeof(options['callback']) == 'function') {
+										options['callback'](context);
+									}
+								}
 							}
 						}
 					)(self)

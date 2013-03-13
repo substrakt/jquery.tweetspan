@@ -8,7 +8,7 @@
 	</head>
 	
 	<body>
-		<div class="tweets" data-account="mrmarksteadman" data-count="10">
+		<div class="tweets" data-account="substrakt" data-count="10">
 			<h1>Tweets from @<a href="http://twitter.com/substrakt">substrakt</a></h1>
 			<div class="tweet well">
 				<img class="avatar" data-field="profile_image_url" />
@@ -21,5 +21,21 @@
 				</p>
 			</div>
 		</div>
+		
+		<script>
+			jQuery(document).ready(
+				function() {
+					jQuery('.tweets').tweetspan('callback',
+						function(context) {
+							try {
+								console.log('Obtained', context.find('.tweet').length, 'tweet(s)');
+							} catch (err) {
+								// Cannot log to console
+							}
+						}
+					);
+				}
+			);
+		</script>
 	</body>
 </html>

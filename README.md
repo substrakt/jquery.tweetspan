@@ -32,7 +32,7 @@ would work like this:
 
     <div class="tweets" data-account="substrakt" data-count="5">
         <h1>Tweets from @<a href="http://twitter.com/substrakt">substrakt</a></h1>
-        <div class="tweet well">
+        <div class="tweet">
             <img class="avatar" data-field="profile_image_url" />
             <p data-field="text" data-format="tweet"></p>
             
@@ -43,3 +43,20 @@ would work like this:
             </p>
         </div>
     </div>
+
+## Options
+
+You can set a callback option, to set a function that can run when tweets have been obtained. For example:
+
+	<script>
+		jQuery(document).ready(
+			function($) {
+				$('.tweets').tweetspan('callback',
+					function(context) {
+						alert(context.find('.tweet').length + ' tweet(s)');
+					}
+				);
+			}
+		);
+	</script>
+
