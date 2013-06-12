@@ -1,3 +1,30 @@
+jQuery.fn.tweetspan = function(option, argument) {
+	if(typeof(option) == 'string') {
+		var options = $(this).data('ts-options');
+		
+		if(typeof(options) == 'undefined') {
+			options = {};
+		}
+		
+		options[option] = argument;
+		$(this).data('ts-options', options);
+	}
+};
+
+jQuery.tweetspan = function(cmd, args) {
+	switch(cmd) {
+		case 'endpoint':
+			if(typeof args != 'undefined') {
+				jQuery.tweetspan.endpoint = args;
+			}
+			
+			return jQuery.tweetspan.endpoint;
+			break;
+	}
+};
+
+jQuery.tweetspan.endpoint = 'http://search.twitter.com/search.json';
+
 jQuery(document).ready(
 	function($) {
 		var twitterFilters = {
@@ -20,7 +47,7 @@ jQuery(document).ready(
 				var tTime = new Date(text);
 				var cTime = new Date();
 				var sinceMin = Math.round((cTime - tTime) / 60000);
-
+				
 				if(sinceMin == 0) {
 					var sinceSec = Math.round((cTime - tTime) / 1000);
 					if(sinceSec < 10) {
@@ -113,25 +140,50 @@ jQuery(document).ready(
 			function() {
 				var self = $(this);
 				var account = self.attr('data-account');
+				var hashtag = self.attr('data-hashtag');
 				var count = parseInt(self.attr('data-count'));
-				var url = 'http://search.twitter.com/search.json?from=' + account + '&rpp=' + count
+				var url = $.tweetspan('endpoint');
+				var params = {};
+				
+				if(url.indexOf('?') == -1) {
+					url += '?';
+				} else {
+					url += '&';
+				}
+				
+				params['from'] = account;
+				params['count'] = count;
+				
+				if(hashtag) {
+					params['q'] = '#' + hashtag;
+				}
+				
+				url += $.param(params);
 				
 				$.getJSON(url + '&callback=?',
 					(
 						function(context) {
 							return function(data) {
 								var template = context.find('.tweet');
-								var results = typeof data.results != 'undefined' ? data.results : [];
+								var parent = template.parent();
+								var options = context.data('ts-options');
+								var results = typeof data.statuses != 'undefined' ? data.statuses : [];
 								var tweet;
 								
 								for(var i = 0; i < results.length; i ++) {
 									tweet = template.clone();
 									formatTweetFields(results[i], tweet);
-									context.append(tweet);
+									parent.append(tweet);
 								}
 								
 								template.remove();
 								context.show();
+								
+								if(typeof(options) == 'object') {
+									if(typeof(options['callback']) == 'function') {
+										options['callback'](context);
+									}
+								}
 							}
 						}
 					)(self)

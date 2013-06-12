@@ -6,26 +6,55 @@ You can use any field from the
 [Twitter Search JSON API](https://dev.twitter.com/docs/api/1/get/search)'s result set. You can use filters
 to determine how text should be formatted. Currently available filters are:
 
-- ``tweet``: To format tweet contents, linking @ usernames, hashtags and URLs
-- ``localtime``: To convert the ``created_at`` field into a local time string
-- ``timesince``: To convert the ``created_at`` field into a string showing how long ago the tweet was posted
-- ``capfirst``: To capitalise the first letter of a string.
+- `tweet`: To format tweet contents, linking @ usernames, hashtags and URLs
+- `localtime`: To convert the `created_at` field into a local time string
+- `timesince`: To convert the `created_at` field into a string showing how long ago the tweet was posted
+- `capfirst`: To capitalise the first letter of a string.
 
 To chain filters together, separate each filter name with a space, just as you would with classes.
 
-Any questions, please contact [Substrakt](http://substrakt.co.uk).
+## Authentication
 
-## WordPress plugin
+Since mid 2013, Twitter has required that calls to its search API be authenticated using the same method as
+their main API. You'll need a server-side component which can authenticate and communicate with Twitter.
 
-There's a simple WordPress plugin to achieve the same results.
+If you use WordPress, you can install it via the instructions below and then visit the Settings > Tweetspan
+page in your WordPress dashboard, entering the details for a Twitter app that can access the search API.
+Alternatively you can build an intermediary solution yourself (which we did at Substrakt) so that you don't
+have to enter or change these details for every site you deploy the plugin on.
 
-1. Download ``jquery.tweetspan.php`` and ``jquery.tweetspan.min.js``
-2. Create a directory in your WordPress installation's plugins directory called ``jquery.tweetspan`` and upload those two files there
+## Getting started in PHP
+
+For WordPress-specific instructions, see the section below.
+
+1. Upload the contents of the repo to your server
+2. Add a `<script>` tag pointing to the latest available version of jQuery, in your `<head>` tag
+3. Add another `<script>` tag in your `<head>`, pointing to jquery.tweetspan.min.js
+4. Add another `<script>` tag (in your `<body>` if you prefer) which tells jQuery.tweetspan which endpoint to use:
+
+	<script>$.tweetspan('endpoint', '/jquery.tweetspan.php');</script>
+
+See the "HTML" section below for details on what HTML to include.
+
+## Getting started in WordPress
+
+1. Download the contents of the repo
+2. Create a directory in your WordPress installation's plugins directory called "jquery.tweetspan" and upload the contents there
 3. Activate the plugin
+4. Visit **Settings** > **jQuery Tweetspan** and enter the relevant details
 
-Now you should be able to write your HTML as normal.
+If you want your server to act as the endpoint, meaning that it communicates with Twitter, you'll need to
+[create a Twitter app](https://dev.twitter.com/apps/new) and pass the various app keys to the plugin's settings
+page.
 
-## Quick example
+If you have a third-party service that can pass your search queries to Twitter without you having to specify
+OAuth info, you can enter the URL into the "Endpoint URL" box, leaving the boxes above blank.
+
+There's a widget which you'll find in **Appearance** > **Widgets** called **Tweetspan**. Drag that to a sidebar
+and specify the username to pull tweets from, and the number of tweets to pull. That'll basically render
+the HTML you see below, and add in all of the necessary `<script>` tags.
+
+## HTML
 
 Once your JavaScript is in place - or you've used the WordPress plugin to do so - a simple HTML example
 would work like this:
