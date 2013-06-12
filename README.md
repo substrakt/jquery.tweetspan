@@ -88,3 +88,12 @@ You can set a callback option, to set a function that can run when tweets have b
 			}
 		);
 	</script>
+
+## Credits
+
+The Twitter OAuth client bundled with the PHP solution is
+[TwitterOAuth](https://github.com/abraham/twitteroauth) by
+[Abraham Williams](https://github.com/abraham).
+
+This plugin is written and maintained by [Mark Steadman](http://marksteadman.com/),
+Technical Director of [Substrakt](http://substrakt.co.uk/).
