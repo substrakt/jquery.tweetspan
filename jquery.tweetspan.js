@@ -192,16 +192,3 @@ jQuery(document).ready(
 		).hide();
 	}
 );
-								if(typeof(options) == 'object') {
-									if(typeof(options['callback']) == 'function') {
-										options['callback'](context);
-									}
-								}
-							}
-						}
-					)(self)
-				);
-			}
-		).hide();
-	}
-);
