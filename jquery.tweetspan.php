@@ -271,5 +271,7 @@ if(isset($_GET['from']) || isset($_GET['q'])) {
 	$twitter = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_KEY, TWITTER_ACCESS_SECRET);
 	$twitter->format = null;
 	$response = $twitter->get($url, $_GET);
+	
+	header('HTTP/1.0 200 OK');
 	echo $response;
 }
