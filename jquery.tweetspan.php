@@ -247,6 +247,8 @@ if(isset($_GET['from']) || isset($_GET['q'])) {
 		switch($platform) {
 			case 'wordpress':
 				require_once('../../../wp-blog-header.php');
+				header("HTTP/1.1 200 OK");
+				
 				define('TWITTER_CONSUMER_KEY',
 					trim(get_option('jquery_tweetspan_consumer_key'))
 				);
@@ -271,7 +273,5 @@ if(isset($_GET['from']) || isset($_GET['q'])) {
 	$twitter = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_KEY, TWITTER_ACCESS_SECRET);
 	$twitter->format = null;
 	$response = $twitter->get($url, $_GET);
-	
-	header('HTTP/1.0 200 OK');
 	echo $response;
 }

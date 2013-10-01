@@ -1,13 +1,13 @@
 jQuery.fn.tweetspan = function(option, argument) {
 	if(typeof(option) == 'string') {
-		var options = $(this).data('ts-options');
+		var options = jQuery(this).data('ts-options');
 		
 		if(typeof(options) == 'undefined') {
 			options = {};
 		}
 		
 		options[option] = argument;
-		$(this).data('ts-options', options);
+		jQuery(this).data('ts-options', options);
 	}
 };
 
@@ -27,6 +27,50 @@ jQuery.tweetspan.endpoint = 'http://search.twitter.com/search.json';
 
 jQuery(document).ready(
 	function($) {
+		function TwitterDate(text) {
+			var parts = text.split(' ');
+			var dayName = parts[0];
+			var months = {
+				'Jan': 0,
+				'Feb': 1,
+				'Mar': 2,
+				'Apr': 3,
+				'May': 4,
+				'Jun': 5,
+				'Jul': 6,
+				'Aug': 7,
+				'Sep': 8,
+				'Oct': 9,
+				'Nov': 10,
+				'Dec': 11
+			};
+			
+			var monthName = parts[1];
+			var monthNumber = months[monthName];
+			var dayNumber = parseInt(parts[2]);
+			var timeParts = parts[3].split(':');
+			var hour = parseInt(timeParts[0]);
+			var minute = parseInt(timeParts[1]);
+			var second = parseInt(timeParts[2]);
+			var offset = parts[4];
+			var year = parseInt(parts[5]);
+			var date = new Date(year, monthNumber, dayNumber, hour, minute, second);
+			var utc;
+			
+			if(offset.substr(0, 1) == '+') {
+				offset = offset.substr(1);
+			}
+			
+			offset = parseInt(offset);
+			return new Date(
+				(
+					date.getTime() + (date.getTimezoneOffset() * 60000)
+				) + (
+					3600000 * offset
+				)
+			);
+		}
+		
 		var twitterFilters = {
 			tweet: function(text) {
 				var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i;
@@ -41,10 +85,10 @@ jQuery(document).ready(
 				return text;
 			},
 			localtime: function(text) {
-				return new Date(Date.parse(text)).toLocaleString();
+				return new TwitterDate(text).toLocaleString();
 			},
 			timesince: function(text) {
-				var tTime = new Date(text);
+				var tTime = new TwitterDate(text);
 				var cTime = new Date();
 				var sinceMin = Math.round((cTime - tTime) / 60000);
 				
@@ -83,7 +127,7 @@ jQuery(document).ready(
 					var sinceDay = Math.round(sinceMin / 1440);
 					var since = sinceDay + ' days ago';
 				}
-
+				
 				return since;
 			},
 			capfirst: function(text) {
@@ -113,6 +157,7 @@ jQuery(document).ready(
 				}
 				
 				filters = field.attr('data-format');
+				field.removeAttr('data-format').removeAttr('data-field');
 				
 				if(filters) {
 					filters = filters.split(' ');
@@ -177,7 +222,13 @@ jQuery(document).ready(
 								}
 								
 								template.remove();
-								context.show();
+								context.removeAttr(
+									'data-account'
+								).removeAttr(
+									'data-count'
+								).removeAttr(
+									'data-hashtag'
+								).show();
 								
 								if(typeof(options) == 'object') {
 									if(typeof(options['callback']) == 'function') {
