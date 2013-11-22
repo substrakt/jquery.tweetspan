@@ -2,7 +2,7 @@
 
 /**
  * @package jQuery_tweetspan
- * @version 0.2
+ * @version 0.3
  */
 /*
 Plugin Name: jQuery.tweetspan
@@ -92,7 +92,7 @@ if(defined('WPLANG')) {
 	if(!is_admin()) {
 		wp_register_script(
 			'jquery.tweetspan',
-			plugins_url('jquery.tweetspan.js', 'jquery.tweetspan/jquery.tweetspan.php'),
+			plugins_url('jquery.tweetspan.min.js', 'jquery.tweetspan/jquery.tweetspan.php'),
 			array('jquery'),
 			false,
 			false

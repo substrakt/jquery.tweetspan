@@ -181,14 +181,16 @@ jQuery(document).ready(
 			}
 		}
 		
-		$('.tweets[data-account]').each(
+		$('.tweets').each(
 			function() {
 				var self = $(this);
 				var account = self.attr('data-account');
 				var hashtag = self.attr('data-hashtag');
 				var count = parseInt(self.attr('data-count'));
 				var url = $.tweetspan('endpoint');
-				var params = {};
+				var params = {
+					'count': count
+				};
 				
 				if(url.indexOf('?') == -1) {
 					url += '?';
@@ -196,15 +198,27 @@ jQuery(document).ready(
 					url += '&';
 				}
 				
-				params['from'] = account;
-				params['count'] = count;
+				if(account) {
+					if(account.substr(0, 1) == '@') {
+						params['from'] = account.substr(1);
+					} else {
+						params['from'] = account;
+					}
+				}
 				
 				if(hashtag) {
-					params['q'] = '#' + hashtag;
+					if(hashtag.substr(0, 1) == '#') {
+						params['q'] = hashtag;
+					} else {
+						params['q'] = '#' + hashtag;
+					}
+				}
+				
+				if(!account && !hashtag) {
+					return;
 				}
 				
 				url += $.param(params);
-				
 				$.getJSON(url + '&callback=?',
 					(
 						function(context) {
