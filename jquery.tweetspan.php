@@ -89,14 +89,16 @@ if(defined('WPLANG')) {
 		<?php }
 	}
 	
-	if(!is_admin()) {
-		wp_register_script(
-			'jquery.tweetspan',
-			plugins_url('jquery.tweetspan.min.js', 'jquery.tweetspan/jquery.tweetspan.php'),
-			array('jquery'),
-			false,
-			false
-		);
+	function jquery_tweetspan_init() {
+		if(!is_admin()) {
+			wp_register_script(
+				'jquery.tweetspan',
+				plugins_url('jquery.tweetspan.min.js', 'jquery.tweetspan/jquery.tweetspan.php'),
+				array('jquery'),
+				false,
+				false
+			);
+		}
 	}
 	
 	function jquery_tweetspan_wp_head() {
@@ -232,6 +234,7 @@ if(defined('WPLANG')) {
 		<input name="jquery_tweetspan_endpoint" id="jquery_tweetspan_endpoint" type="text" value="<?php echo get_option('jquery_tweetspan_endpoint'); ?>" placeholder="<?php echo plugins_url('jquery.tweetspan.php', 'jquery.tweetspan/jquery.tweetspan.php'); ?>?platform=wordpress" />
 	<?php }
 	
+	add_filter('init', 'jquery_tweetspan_init');
 	add_filter('init', 'jquery_tweetspan_wp_head');
 	add_action('widgets_init', 'jquery_tweetspan_register_widgets');
 	add_action('admin_init', 'jquery_tweetspans_admin_init');
